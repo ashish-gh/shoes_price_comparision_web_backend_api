@@ -1,0 +1,32 @@
+{
+  "name": "t2-backend-api-ashish-gh",
+  "version": "1.0.0",
+  "description": "Backend application for my application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stw304cem/t2-backend-api-ashish-gh.git"
+  },
+  "keywords": [
+    "express",
+    "body-parser",
+    "sqlite3",
+    "cors"
+  ],
+  "author": "ashish ghimire",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stw304cem/t2-backend-api-ashish-gh/issues"
+  },
+  "homepage": "https://github.com/stw304cem/t2-backend-api-ashish-gh#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.0",
+    "sqlite3": "^4.0.8"
+  }
+}
