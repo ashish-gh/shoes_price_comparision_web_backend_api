@@ -58,11 +58,30 @@ function addUser(req,resp){
     })
 }
 
+// handlers for recipe
+
+function getRecipes(req,resp){
+    dbClient
+    .select('name', 'description')
+    .table('recipe')
+    .then(data=>{
+        resp.json({
+            data : data
+        })
+    })
+}
+
+
 
 
 express.get('/', sendStatus);
 express.get('/api/user', getUsers);
 express.post('/api/user', addUser);
+
+// recipe
+express.get('/api/recipe', getRecipes);
+
+
 
 express.listen(8000, 'localhost', ()=> {
     console.log("Server is running at", 8000)
