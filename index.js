@@ -72,6 +72,30 @@ function getRecipes(req,resp){
 }
 
 
+function addRecipe(req,resp){
+    dbClient('recipe')
+    .insert({
+        id : '7',
+        name: 'Toast',
+        description: 'Fried Toast'
+    })
+    .then(val =>{
+        resp.json({
+            status: 'success'
+        })
+    })
+    .catch(error => {
+        resp.json({
+            status: 'fail'
+        })
+        resp.json({
+            status: 'ok'
+        })
+       
+    })
+}
+
+
 
 
 express.get('/', sendStatus);
@@ -80,6 +104,7 @@ express.post('/api/user', addUser);
 
 // recipe
 express.get('/api/recipe', getRecipes);
+express.post('/api/recipe', addRecipe);
 
 
 
