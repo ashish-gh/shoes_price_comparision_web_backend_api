@@ -8,12 +8,52 @@ const bodyParser = require('body-parser');
 const knex = require('knex');
 const config = require('./knexfile');
 
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+
+
 const dbClient= knex(config)
 
 //create an express instance /object
 
-express.use(bodyParser.json())
+// express.use(cors());
+express.use(bodyParser.json());
 
+
+
+// users
+// register user
+
+function registerUser(request, response) {
+    // get username
+    const email = request.body.email;
+    // get password
+    const password = request.body.password;
+  
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    dbClient
+      .table('users')
+      .insert({
+        // this must be same for database's column
+        email: email,
+        password: hashedPassword
+      })
+      .then(data => {
+        response.json({
+          status: 'success',
+          data: {
+            email: email,
+          }
+        })  
+      })
+      .catch(error => {
+        response.json({
+          status: 'fail',
+        })
+      })
+  }
+  
 
 
 
@@ -60,53 +100,15 @@ function addComment(req,resp){
     })
 }
 
-// handlers for recipe
-
-// function getRecipes(req,resp){
-//     dbClient
-//     .select('name', 'description')
-//     .table('recipe')
-//     .then(data=>{
-//         resp.json({
-//             data : data
-//         })
-//     })
-// }
-
-
-// function addRecipe(req,resp){
-//     dbClient('recipe')
-//     .insert({
-//         id : '7',
-//         name: 'Toast',
-//         description: 'Fried Toast'
-//     })
-//     .then(val =>{
-//         resp.json({
-//             status: 'success'
-//         })
-//     })
-//     .catch(error => {
-//         resp.json({
-//             status: 'fail'
-//         })
-//         resp.json({
-//             status: 'ok'
-//         })
-       
-//     })
-// }
 
 
 
 
 express.get('/', sendStatus);
-// express.get('/api/user', getUsers);
-// express.post('/api/user', addUser);
 
-// recipe
-// express.get('/api/recipe', getRecipes);
-// express.post('/api/recipe', addRecipe);
+// user
+express.post('/api/register', registerUser);
+
 
 // recipeComment
 express.get('/api/comment', getComments);
