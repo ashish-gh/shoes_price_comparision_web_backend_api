@@ -64,6 +64,9 @@ function registerUser(request, response) {
       })
   }
   
+
+
+
 // create a auth handler
 async function authenticate(request, response) {
   
@@ -95,6 +98,14 @@ async function authenticate(request, response) {
   } 
 }
 
+function notAuthenticated(response) {
+  response.json({
+    status: 'fail',
+    message: 'Not Authenticated',
+    code: 404
+  });
+}
+
 
 function _authenticate(token) { //token -> 123123789127389213
   if (!token) {
@@ -110,13 +121,51 @@ function _authenticate(token) { //token -> 123123789127389213
 }
 
 
-function notAuthenticated(response) {
-  response.json({
-    status: 'fail',
-    message: 'Not Authenticated',
-    code: 404
-  });
+
+async function getUsers(request, response) {
+  if (_authenticate(request.headers.authorization) === false) {
+    notAuthenticated(response);
+    return;
+  }
+  try {
+    const data = await dbClient.table('users').select('email');
+    response.json({
+      status:'success',
+      data: data
+    })
+  } catch(error) {
+    notAuthenticated(response);
+    error:error.toString()
+    return;
+  }
 }
+
+function getUser(request, response) {
+  const isAuthenticated = _authenticate(request.headers.authorization);
+  if (!isAuthenticated) {
+    notAuthenticated(response);
+    return;
+  }
+  dbClient
+    .table('users')
+    .where({
+      email: request.params.email
+    })
+    .select('email', 'password')
+    .then(data => {
+      response.json({
+        status: 'success',
+        data: data
+      })
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+
 
 
 
@@ -171,6 +220,7 @@ express.get('/', sendStatus);
 
 // user
 express.post('/api/register', registerUser);
+express.post('/api/auth', authenticate); // 1
 
 
 // recipeComment
