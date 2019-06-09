@@ -214,6 +214,157 @@ function addComment(req,resp){
     })
 }
 
+// shoes
+async function getShoes(request, response) {
+  // if (_authenticate(request.headers.authorization) === false) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+  try {
+    const data = await dbClient.table('shoes').select();
+    response.json({
+      status:'success',
+      data: data
+    })
+  } catch(error) {
+    notAuthenticated(response);
+    error:error.toString()
+    return;
+  }
+}
+
+// add shoes
+
+function addShoes(request, response) {
+
+  const shoesBrand = request.body.shoesBrand;
+  const shoesName = request.body.shoesName;
+  const shoesPrice = request.body.shoesPrice;
+  const shoesDescription = request.body.shoesDescription;
+  const shoesImageName = request.body.shoesImageName;
+
+  dbClient
+    .table('shoes')
+    .insert({
+      // this must be same for database's column
+      shoesBrand: shoesBrand,
+      shoesName: shoesName,
+      shoesPrice: shoesPrice,
+      shoesDescription: shoesDescription,
+      shoesImageName: shoesImageName
+      
+    })
+    .then(data => {
+      response.json({
+        status: 'success',
+        data:data
+      })  
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+// get shoe
+
+async function getShoe(request, response) {
+  // const isAuthenticated = _authenticate(request.headers.authorization);
+  // if (!isAuthenticated) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+  dbClient
+    .table('shoes')
+    .where({
+     itemId: request.params.shoesId
+    })
+    .select('')
+    .then(data => {
+      response.json({
+        status: 'success',
+        data: data
+      })
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+
+// update shoes
+
+
+async function updateShoes(request,response){
+  
+  console.log(request.body);
+  const  shoesId = request.params.shoesId;
+  const  shoesBrand = request.body.shoesBrand;
+  const  shoesName = request.body.shoesName;
+  const  shoesPrice = request.body.shoesPrice;
+  const  shoesDescription = request.body.shoesDescription;
+  const  shoesImageName = request.body.shoesImageName;
+  
+
+  dbClient
+   .table('shoes')
+   .where('itemId',shoesId)
+   .update(
+     {
+       shoesBrand : shoesBrand,
+       shoesName : shoesName,
+       shoesPrice: shoesPrice,
+       shoesDescription: shoesDescription,
+       shoesImageName : shoesImageName
+     }
+      )
+   .then(data => {
+    response.json({
+      status: 'updated successfully',      
+    })
+  })
+  .catch(error =>{
+    console.log(error);
+    res.json({
+      status:'fail',
+      // data:null,
+      error:error,
+      // error:true
+    })
+  })  
+}
+
+// delete shoes
+
+function deleteShoes(request,response){
+  console.log(request.body);
+  const  shoesId = request.params.shoesId;
+  
+  dbClient
+   .table('shoes')
+   .where('itemId',shoesId)
+   .del()
+   .then(data => {
+    response.json({
+      status: 'deleted successfully',      
+    })
+  })
+  .catch(error =>{
+    console.log(error);
+    res.json({
+      status:'fail',
+      data:null,
+      error:true
+    })
+  })  
+  }
+
+
+
+
 
 
 
@@ -223,6 +374,16 @@ express.get('/', sendStatus);
 // user
 express.post('/api/register', registerUser);
 express.post('/api/auth', authenticate); // 1
+
+
+// shoes
+
+express.get('/api/shoes', getShoes);
+express.get('/api/shoes/:shoesId', getShoe);
+express.post('/api/shoes', addShoes);
+express.put('/api/shoes/:shoesId', updateShoes)
+express.delete('/api/shoes/:shoesId', deleteShoes)
+
 
 
 // recipeComment

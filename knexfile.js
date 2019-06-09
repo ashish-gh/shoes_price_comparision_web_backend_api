@@ -6,7 +6,7 @@ module.exports={
     connection:{
         host: 'localhost',
         user: "root",
-        database : 'recipe',
+        database : 'android_api',
         password: ''
     },
     version: '5.2',
