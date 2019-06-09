@@ -362,12 +362,147 @@ function deleteShoes(request,response){
   })  
   }
 
+  
+// store
+async function getStores(request, response) {
+  // if (_authenticate(request.headers.authorization) === false) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+  try {
+    const data = await dbClient.table('store').select();
+    response.json({
+      status:'success',
+      data: data
+    })
+  } catch(error) {
+    notAuthenticated(response);
+    error:error.toString()
+    return;
+  }
+}
+
+// add store
+
+function addStore(request, response) {
+
+  const storeName = request.body.storeName;
+  const latitude = request.body.latitude;
+  const longitude = request.body.longitude;
+  
+  dbClient
+    .table('store')
+    .insert({
+      // this must be same for database's column
+      storeName: storeName,
+      latitude: latitude,
+      longitude: longitude
+      
+    })
+    .then(data => {
+      response.json({
+        status: 'success',
+        data:data
+      })  
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+// get shoe
+
+async function getStore(request, response) {
+  // const isAuthenticated = _authenticate(request.headers.authorization);
+  // if (!isAuthenticated) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+  dbClient
+    .table('store')
+    .where({
+     storeId: request.params.storeId
+    })
+    .select('')
+    .then(data => {
+      response.json({
+        status: 'success',
+        data: data
+      })
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+
+// update shoes
 
 
+async function updateStore(request,response){
+  
+  console.log(request.body);
+  const  storeId = request.params.storeId;
+  const  storeName = request.body.storeName;
+  const  latitude = request.body.latitude;
+  const  longitude = request.body.longitude;
+  
+  dbClient
+   .table('store')
+   .where('storeId',storeId)
+   .update(
+     {
+       storeName : storeName,
+       latitude: latitude,
+       longitude :longitude
+        }
+      )
+   .then(data => {
+    response.json({
+      status: 'updated successfully',      
+    })
+  })
+  .catch(error =>{
+    console.log(error);
+    res.json({
+      status:'fail',
+      // data:null,
+      error:error,
+      // error:true
+    })
+  })  
+}
 
+// delete shoes
 
+function deleteStore(request,response){
+  console.log(request.body);
+  const  storeId = request.params.storeId;
+  
+  dbClient
+   .table('store')
+   .where('storeId',storeId)
+   .del()
+   .then(data => {
+    response.json({
+      status: 'deleted successfully',      
+    })
+  })
+  .catch(error =>{
+    console.log(error);
+    res.json({
+      status:'fail',
+      data:null,
+      error:true
+    })
+  })  
+  }
 
-
+// -----------------------------
 
 express.get('/', sendStatus);
 
@@ -377,12 +512,19 @@ express.post('/api/auth', authenticate); // 1
 
 
 // shoes
-
 express.get('/api/shoes', getShoes);
 express.get('/api/shoes/:shoesId', getShoe);
 express.post('/api/shoes', addShoes);
 express.put('/api/shoes/:shoesId', updateShoes)
 express.delete('/api/shoes/:shoesId', deleteShoes)
+
+// store
+express.get('/api/store', getStores);
+express.get('/api/store/:storeId', getStore);
+express.post('/api/store', addStore);
+express.put('/api/store/:storeId', updateStore)
+express.delete('/api/store/:storeId', deleteStore)
+
 
 
 
