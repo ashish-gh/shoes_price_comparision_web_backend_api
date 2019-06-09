@@ -15,4 +15,15 @@ module.exports={
         directory: path.resolve(__dirname,'./migrations')        
     },
     useNullAsDefault: true
-};
+};function _authenticate(token) { //token -> 123123789127389213
+  if (!token) {
+    return false;
+  }
+  try {
+    const payload = jwt.verify(token, SECRET_KEY);
+    return true;
+    // use payload if required
+  } catch(error) {
+    return false
+  }
+}

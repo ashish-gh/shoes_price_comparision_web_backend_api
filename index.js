@@ -60,12 +60,11 @@ function registerUser(request, response) {
       .catch(error => {
         response.json({
           status: 'fail',
+          error: error.toString()
         })
       })
   }
   
-
-
 
 // create a auth handler
 async function authenticate(request, response) {
@@ -93,10 +92,13 @@ async function authenticate(request, response) {
    } else {
      response.json({
        status: 'fail',
+       message:'not matched password',
      })
    }
   } 
 }
+
+
 
 function notAuthenticated(response) {
   response.json({
