@@ -503,6 +503,148 @@ function deleteStore(request,response){
   }
 
 // -----------------------------
+// review
+async function getReviews(request, response) {
+  // if (_authenticate(request.headers.authorization) === false) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+  try {
+    const data = await dbClient.table('review').select();
+    response.json({
+      status:'success',
+      data: data
+    })
+  } catch(error) {
+    notAuthenticated(response);
+    error:error.toString()
+    return;
+  }
+}
+
+// add review
+
+function addReview(request, response) {
+
+  const review = request.body.review;
+  const username = request.body.username;
+  const shoesId = request.body.shoesId;
+  const reviewDate = request.body.reviewDate;
+  
+  dbClient
+    .table('review')
+    .insert({
+      // this must be same for database's column
+      review: review,
+      username: username,
+      shoesId: shoesId,
+      reviewDate : reviewDate,      
+    })
+    .then(data => {
+      response.json({
+        status: 'success',
+        data:data
+      })  
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+
+// get review
+async function getReview(request, response) {
+  // const isAuthenticated = _authenticate(request.headers.authorization);
+  // if (!isAuthenticated) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+
+  reviewId = request.params.reviewId
+  dbClient
+    .table('review')
+    .where('reviewId',reviewId)
+    .select('')
+    .then(data => {
+      response.json({
+        status: 'success',
+        data: data
+      })
+    })
+    .catch(error => {
+      response.json({
+        status: 'fail',
+        error: error.toString()
+      })
+    })
+}
+
+// update review
+
+
+async function updateReview(request,response){
+  
+  console.log(request.body);
+  const  reviewId = request.params.reviewId;
+  const  review = request.body.review;
+  const  username = request.body.username;
+  const  reviewTime = request.body.reviewTime;
+  const  shoesId = request.body.shoesId;
+  
+  dbClient
+   .table('review')
+   .where('reviewId',reviewId)
+   .update(
+     {
+       review : review,
+       username: username,
+       shoesId :shoesId,
+       reviewTime: reviewTime
+        }
+      )
+   .then(data => {
+    response.json({
+      status: 'updated successfully',      
+    })
+  })
+  .catch(error =>{
+    console.log(error);
+    res.json({
+      status:'fail',
+      // data:null,
+      error:error,
+      // error:true
+    })
+  })  
+}
+
+// delete review
+
+function deleteReview(request,response){
+  console.log(request.body);
+  const  reviewId = request.params.reviewId;
+  
+  dbClient
+   .table('review')
+   .where('reviewId',reviewId)
+   .del()
+   .then(data => {
+    response.json({
+      status: 'deleted successfully',      
+    })
+  })
+  .catch(error =>{
+    console.log(error);
+    res.json({
+      status:'fail',
+      data:null,
+      error:true
+    })
+  })  
+  }
+
 
 express.get('/', sendStatus);
 
@@ -524,6 +666,15 @@ express.get('/api/store/:storeId', getStore);
 express.post('/api/store', addStore);
 express.put('/api/store/:storeId', updateStore)
 express.delete('/api/store/:storeId', deleteStore)
+
+
+// review
+express.get('/api/review', getReviews);
+express.get('/api/review/:reviewId', getReview);
+express.post('/api/review', addReview);
+express.put('/api/review/:reviewId', updateReview)
+express.delete('/api/review/:reviewId', deleteReview)
+
 
 
 
