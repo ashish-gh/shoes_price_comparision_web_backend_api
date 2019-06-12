@@ -11,6 +11,23 @@ const config = require('./knexfile');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// for uploading image
+const path=require('path');
+express.use(Express.static(path.join(__dirname, 'public')));
+
+const multer = require('multer'); //to upload the image file
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/uploads/')
+  },
+  filename: (req, file, cb) => {
+    // console.log(file.originalname);
+    // console.log(file.fieldname);
+    let ext=path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + Date.now() + '.jpg')
+  }
+});
+var upload = multer({storage: storage}).single('imageFile');
 
 
 
@@ -645,8 +662,24 @@ function deleteReview(request,response){
   })  
   }
 
+  // to upload image
+function uploadimage(req,res){
+  upload(req,res,function(err) {
+      if(err) {
+          return res.end("Error uploading file.");
+      }
+      res.json(req.file);
+  });
+
+}
+
+
 
 express.get('/', sendStatus);
+
+// to upload image
+express.post('/api/upload', uploadimage);
+
 
 // user
 express.post('/api/register', registerUser);
