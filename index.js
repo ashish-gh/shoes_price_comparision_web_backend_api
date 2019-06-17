@@ -52,19 +52,24 @@ function getVersion(req, res) {
 // users
 // register user
 
-function registerUser(request, response) {
+async function registerUser(request, response) {
     // get username
     const email = request.body.email;
     // get password
     const password = request.body.password;
-  
+    const userType=request.body.userType;
+
     const hashedPassword = bcrypt.hashSync(password, 10);
-    dbClient
+    const data = await dbClient.table('users').first('email').where('email', email);
+    if (!data) {
+      dbClient
       .table('users')
       .insert({
         // this must be same for database's column
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
+        userType: userType
+
       })
       .then(data => {
         response.json({
@@ -79,7 +84,13 @@ function registerUser(request, response) {
           status: 'fail',
           error: error.toString()
         })
-      })
+      })      
+    } else {
+      response.json({
+        status: 'fail',
+        message: 'User already exists'
+    })
+  }
   }
   
 
@@ -252,7 +263,7 @@ async function getShoes(request, response) {
 
 // add shoes
 
-function addShoes(request, response) {
+async function addShoes(request, response) {
 
   const shoesBrand = request.body.shoesBrand;
   const shoesName = request.body.shoesName;
@@ -260,7 +271,10 @@ function addShoes(request, response) {
   const shoesDescription = request.body.shoesDescription;
   const shoesImageName = request.body.shoesImageName;
 
-  dbClient
+
+  
+
+  await dbClient
     .table('shoes')
     .insert({
       // this must be same for database's column
@@ -287,11 +301,11 @@ function addShoes(request, response) {
 // get shoe
 
 async function getShoe(request, response) {
-  // const isAuthenticated = _authenticate(request.headers.authorization);
-  // if (!isAuthenticated) {
-  //   notAuthenticated(response);
-  //   return;
-  // }
+  const isAuthenticated = _authenticate(request.headers.authorization);
+  if (!isAuthenticated) {
+    notAuthenticated(response);
+    return;
+  }
   dbClient
     .table('shoes')
     .where({
@@ -663,7 +677,7 @@ function deleteReview(request,response){
   }
 
   // to upload image
-function uploadimage(req,res){
+async function uploadimage(req,res){
   upload(req,res,function(err) {
       if(err) {
           return res.end("Error uploading file.");
