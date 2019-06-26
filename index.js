@@ -157,6 +157,7 @@ async function getUsers(request, response) {
     notAuthenticated(response);
     return;
   }
+
   try {
     const data = await dbClient.table('users').select('email');
     response.json({
@@ -168,32 +169,32 @@ async function getUsers(request, response) {
     error:error.toString()
     return;
   }
+
 }
 
-function getUser(request, response) {
-  const isAuthenticated = _authenticate(request.headers.authorization);
-  if (!isAuthenticated) {
-    notAuthenticated(response);
-    return;
-  }
-  dbClient
+async function getUser(request, response) {
+  // const isAuthenticated = _authenticate(request.headers.authorization);
+  // if (!isAuthenticated) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
+
+  try {
+    const data = await dbClient
     .table('users')
     .where({
       email: request.params.email
     })
     .select('email', 'password')
-    .then(data => {
-      response.json({
-        status: 'success',
-        data: data
-      })
+    response.json({
+      status:'success',
+      data: data
     })
-    .catch(error => {
-      response.json({
-        status: 'fail',
-        error: error.toString()
-      })
-    })
+  } catch(error) {
+    notAuthenticated(response);
+    error:error.toString()
+    return;
+  }
 }
 
 
@@ -256,7 +257,7 @@ async function getShoes(request, response) {
     })
   } catch(error) {
     notAuthenticated(response);
-    error:error.toString()
+    error:error.toString();
     return;
   }
 }
@@ -265,47 +266,60 @@ async function getShoes(request, response) {
 
 async function addShoes(request, response) {
 
+  try{
   const shoesBrand = request.body.shoesBrand;
   const shoesName = request.body.shoesName;
   const shoesPrice = request.body.shoesPrice;
   const shoesDescription = request.body.shoesDescription;
   const shoesImageName = request.body.shoesImageName;
+  
+  const data = await dbClient
+  .table('shoes')
+  .insert({
+    // this must be same for database's column
+    shoesBrand: shoesBrand,
+    shoesName: shoesName,
+    shoesPrice: shoesPrice,
+    shoesDescription: shoesDescription,
+    shoesImageName: shoesImageName  
+  });
+  response.json({
+    status:'success',
+    data: data
+  })
+  }catch(error){
+    // notAuthenticated(response);
+    response.json(error);
+    error:error.toString();
+    return;
+  }
+  
 
 
   
 
-  await dbClient
-    .table('shoes')
-    .insert({
-      // this must be same for database's column
-      shoesBrand: shoesBrand,
-      shoesName: shoesName,
-      shoesPrice: shoesPrice,
-      shoesDescription: shoesDescription,
-      shoesImageName: shoesImageName
-      
-    })
-    .then(data => {
-      response.json({
-        status: 'success',
-        data:data
-      })  
-    })
-    .catch(error => {
-      response.json({
-        status: 'fail',
-        error: error.toString()
-      })
-    })
+
+    // .then(data => {
+    //   response.json({
+    //     status: 'success',
+    //     data:data
+    //   })  
+    // })
+    // .catch(error => {
+    //   response.json({
+    //     status: 'fail',
+    //     error: error.toString()
+    //   })
+    // })
 }
 // get shoe
 
 async function getShoe(request, response) {
-  const isAuthenticated = _authenticate(request.headers.authorization);
-  if (!isAuthenticated) {
-    notAuthenticated(response);
-    return;
-  }
+  // const isAuthenticated = _authenticate(request.headers.authorization);
+  // if (!isAuthenticated) {
+  //   notAuthenticated(response);
+  //   return;
+  // }
   dbClient
     .table('shoes')
     .where({
@@ -514,7 +528,8 @@ function deleteStore(request,response){
   console.log(request.body);
   const  storeId = request.params.storeId;
   
-  dbClient
+  try{
+    dbClient
    .table('store')
    .where('storeId',storeId)
    .del()
@@ -523,14 +538,11 @@ function deleteStore(request,response){
       status: 'deleted successfully',      
     })
   })
-  .catch(error =>{
-    console.log(error);
-    res.json({
-      status:'fail',
-      data:null,
-      error:true
-    })
-  })  
+  }catch(error){
+    error:error.toString()
+    return;
+    status:'fail';
+  }
   }
 
 // -----------------------------
