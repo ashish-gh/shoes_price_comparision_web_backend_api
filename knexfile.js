@@ -15,7 +15,9 @@ module.exports={
         directory: path.resolve(__dirname,'./migrations')        
     },
     useNullAsDefault: true
-};function _authenticate(token) { //token -> 123123789127389213
+};
+
+function _authenticate(token) { //token -> 123123789127389213
   if (!token) {
     return false;
   }
