@@ -24,7 +24,21 @@ const getShoes = async function getShoes(res){
     }
 };
 
+const deleteShoes = async function deleteShoes(shoesId, res){
+    try{
+        await dbClient
+        .table('shoes')
+        .where('itemId', shoesId)
+        .del();
+        res(null, true);
+    }catch(error){
+        res(null, false);   
+        console.log("error: ", error);
+    }
+};
+
+
 module.exports ={
-    addShoes,getShoes
+    addShoes,getShoes, deleteShoes
 }
     

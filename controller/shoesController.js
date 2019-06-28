@@ -46,7 +46,29 @@ const getShoes = (req, res)=>{
 };
 
 
+const deleteShoes = (req, res)=>{
+    const shoesId = req.params.shoesId;
+    const data =model.deleteShoes(shoesId, async function(err, result){
+        if(!result){
+            res.json({
+                result:result,
+                success: result,
+                message: 'data not deleted'
+            });
+        }else if(result){
+            res.json({
+                result: result,
+                message:'data deleted'
+            });
+        }else{
+            console.log(err);
+        }
+    });
+};
+
+
+
 
 module.exports =  {
-    addShoes, getShoes
+    addShoes, getShoes,deleteShoes
 }
