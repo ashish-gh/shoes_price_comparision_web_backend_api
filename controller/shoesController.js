@@ -67,8 +67,61 @@ const deleteShoes = (req, res)=>{
 };
 
 
+const updateShoes = (req, res)=>{
+    const shoesName = req.body.shoesName;
+    const shoesBrand = req.body.shoesBrand;
+    const shoesPrice = req.body.shoesPrice;
+    const shoesDescription = req.body.shoesDescription;
+    const shoesImageName = req.body.shoesImageName;
+
+    const shoesId = req.params.shoesId;
+    const data =model.updateShoes(shoesId, shoesName, shoesBrand,shoesPrice,shoesDescription,shoesImageName, async function(err, result,dataResult){
+        if(!result){
+            res.json({
+                result:result,
+                success: result,
+                message: 'data not updated'
+            });
+        }else if(result){
+            res.json({
+                result: result,
+                message:'data update',
+                dataResult:dataResult
+
+            });
+        }else{
+            console.log(err);
+        }
+    });
+};
+
+
+const getShoesById = (req, res)=>{
+    const shoesId = req.params.shoesId;
+    const data = model.getShoesById(shoesId, async function(err, result, dataResult){
+        if(!result){
+            res.json({
+                result:result,
+                success:result,
+                message: 'data not retreived'
+            });
+        }else if(result){
+            res.json({
+                success: result,
+                message:'data retreived',
+                data: data.toString(),
+                dataResult: dataResult
+            });
+            
+        }else{
+            console.log(err);
+        }
+    });
+};
+
+
 
 
 module.exports =  {
-    addShoes, getShoes,deleteShoes
+    addShoes, getShoes,deleteShoes,updateShoes,getShoesById
 }
