@@ -23,5 +23,30 @@ const addShoes = (req, res)=>{
 };
 
 
+const getShoes = (req, res)=>{
+    const data = model.getShoes(async function(err, result, dataResult){
+        if(!result){
+            res.json({
+                result:result,
+                success:result,
+                message: 'data not retreived'
+            });
+        }else if(result){
+            res.json({
+                success: result,
+                message:'data retreived',
+                data: data.toString(),
+                dataResult: dataResult
+            });
+            
+        }else{
+            console.log(err);
+        }
+    });
+};
 
-module.exports =  {addShoes}
+
+
+module.exports =  {
+    addShoes, getShoes
+}

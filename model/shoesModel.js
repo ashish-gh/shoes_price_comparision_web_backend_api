@@ -14,7 +14,17 @@ try{
     }
 };
 
+
+const getShoes = async function getShoes(res){
+    try{
+        const data = await dbClient.table('shoes').select('');
+        res(null, true, data);
+    }catch{
+        res(null, false);
+    }
+};
+
 module.exports ={
-    addShoes
+    addShoes,getShoes
 }
     
