@@ -7,6 +7,10 @@ app = express();
 
 
 const shoesRoutes = require('./routes/shoesRoutes');
+<<<<<<< HEAD
+=======
+const storeRoutes = require('./routes/storeRoutes');
+>>>>>>> store
 
 
 //cors
@@ -20,5 +24,11 @@ app.use(bodyParser.json());
 // route for shoes
 app.use('/', shoesRoutes);
 
+<<<<<<< HEAD
+=======
+// route for store
+app.use('/', storeRoutes);
+
+>>>>>>> store
 
 module.exports = app;
