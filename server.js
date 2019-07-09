@@ -7,9 +7,13 @@ app = express();
 
 
 const shoesRoutes = require('./routes/shoesRoutes');
+<<<<<<< HEAD
 const storeRoutes = require('./routes/storeRoutes');
 const reviewRoute = require('./routes/reviewRoutes');
 const userRoute = require('./routes/userRoutes');
+=======
+const storeRoutes = require('./routes/shopRoutes');
+>>>>>>> store
 
 
 //cors
