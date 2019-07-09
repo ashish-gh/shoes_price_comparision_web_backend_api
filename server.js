@@ -7,13 +7,9 @@ app = express();
 
 
 const shoesRoutes = require('./routes/shoesRoutes');
-<<<<<<< HEAD
-const storeRoutes = require('./routes/storeRoutes');
+const shopRoutes = require('./routes/shopRoutes');
 const reviewRoute = require('./routes/reviewRoutes');
 const userRoute = require('./routes/userRoutes');
-=======
-const storeRoutes = require('./routes/shopRoutes');
->>>>>>> store
 
 
 //cors
@@ -28,7 +24,7 @@ app.use(bodyParser.json());
 app.use('/', shoesRoutes);
 
 // route for store
-app.use('/', storeRoutes);
+app.use('/', shopRoutes);
 
 // route for reivew
 app.use('/', reviewRoute)
