@@ -110,15 +110,15 @@ const getUsers = (req, res)=>{
 // to get user by id
 const getUserById = (req, res)=>{
 
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    // const token = req.headers.authorization;
+    // console.log(token);
+    // if(token==undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
     
     const userId = req.params.userId;
@@ -144,15 +144,17 @@ const getUserById = (req, res)=>{
 // to get user by email
 const getUserByEmail = (req, res)=>{
 
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    
+
+    // const token = req.headers.authorization;
+    // console.log("this is token" + token);
+    // if(token == undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
     const emailAddress = req.params.email;
     const data = model.getUserByEmail(emailAddress, async function(err, result, dataResult){
@@ -173,15 +175,15 @@ const getUserByEmail = (req, res)=>{
 
 // to update user
 const updateUser = (req, res)=>{
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    // const token = req.headers.authorization;
+    // console.log(token);
+    // if(token==undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
@@ -218,15 +220,15 @@ const updateUser = (req, res)=>{
 // to deleteuser
 const deleteUser = (req, res)=>{
     
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    // const token = req.headers.authorization;
+    // console.log(token);
+    // if(token==undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
     const userId = req.params.userId;
     const data =model.deleteUser(userId, async function(err, result){

@@ -5,15 +5,15 @@ const model = require('../model/shopModel');
 // controller to add shop
 const addShop = (req, res)=>{
     
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    // const token = req.headers.authorization;
+    // console.log(token);
+    // if(token==undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
     const shopDetails = req.body;    
     model.addShop(shopDetails,async function(err, result, dataResult){
@@ -86,15 +86,15 @@ const getShopById = (req, res)=>{
 // controller to delete shop
 const deleteShop = (req, res)=>{
 
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    // const token = req.headers.authorization;
+    // console.log(token);
+    // if(token==undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
     const shopId = req.params.shopId;
     
@@ -119,15 +119,15 @@ const deleteShop = (req, res)=>{
 // controller to update shop
 const updateShop = (req, res)=>{
 
-    const token = req.headers.authorization;
-    console.log(token);
-    if(token==undefined){
-        notAuthenticated(res);
-        return;
-    }else if(token.length <5){
-        notAuthenticated(res);
-        return;
-    }
+    // const token = req.headers.authorization;
+    // console.log(token);
+    // if(token==undefined){
+    //     notAuthenticated(res);
+    //     return;
+    // }else if(token.length <5){
+    //     notAuthenticated(res);
+    //     return;
+    // }
 
 
     const shopName= req.body.shopName;
