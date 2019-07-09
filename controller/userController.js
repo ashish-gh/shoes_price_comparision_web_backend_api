@@ -76,16 +76,17 @@ const login = (req, res)=>{
 
 const getUsers = (req, res)=>{
 
-    // const token = req.headers.authorization;
-    // console.log("token" + token)
-    // console.log(token);
-    // if(token==undefined){
-    //     notAuthenticated(res);
-    //     return;
-    // }else if(token.length <5){
-    //     notAuthenticated(res);
-    //     return;
-    // }
+    // to check if user is registered or not
+    const token = req.headers.authorization;
+    console.log("token" + token)
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
     
     const data = model.getUsers(async function(err, result, dataResult){
 
@@ -99,32 +100,29 @@ const getUsers = (req, res)=>{
                 status:'success',
                 dataResult:dataResult
             }
-        );
-            
+        );         
         }else{
             console.log(err);
         }
     });
 };
 
-
+// to get user by id
 const getUserById = (req, res)=>{
 
-    // const token = req.headers.authorization;
-    // console.log(token);
-    // if(token==undefined){
-    //     notAuthenticated(res);
-    //     return;
-    // }else if(token.length <5){
-    //     notAuthenticated(res);
-    //     return;
-    // }
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
 
     
     const userId = req.params.userId;
     const data = model.getUserById(userId, async function(err, result, dataResult){
-        console.log(dataResult.length);
-        // console.log(typeof(dataResult.length));
         
         if(dataResult.length == 0){       
             res.json({
@@ -135,8 +133,7 @@ const getUserById = (req, res)=>{
             res.json({
                 status:'success',
                 dataResult: dataResult
-            });
-            
+            });            
         }else{
             console.log(err);
         }
@@ -144,23 +141,20 @@ const getUserById = (req, res)=>{
 };
 
 
-
+// to get user by email
 const getUserByEmail = (req, res)=>{
 
-    // const token = req.headers.authorization;
-    // console.log(token);
-    // if(token==undefined){
-    //     notAuthenticated(res);
-    //     return;
-    // }else if(token.length <5){
-    //     notAuthenticated(res);
-    //     return;
-    // }
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
 
-    
-    console.log("type" + typeof(email));
     const emailAddress = req.params.email;
-    console.log("this is email", emailAddress);
     const data = model.getUserByEmail(emailAddress, async function(err, result, dataResult){
         if(!result){
             res.json({
@@ -168,10 +162,7 @@ const getUserByEmail = (req, res)=>{
                 message: 'data not retreived'
             });
         }else if(result){
-
-            res.json(dataResult);
-            console.log(dataResult);
-            
+            res.json(dataResult);        
         }else{
             console.log(err);
         }
@@ -181,17 +172,16 @@ const getUserByEmail = (req, res)=>{
 
 
 // to update user
-
 const updateUser = (req, res)=>{
-    // const token = req.headers.authorization;
-    // console.log(token);
-    // if(token==undefined){
-    //     notAuthenticated(res);
-    //     return;
-    // }else if(token.length <5){
-    //     notAuthenticated(res);
-    //     return;
-    // }
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
 
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
@@ -203,8 +193,6 @@ const updateUser = (req, res)=>{
 
     const userId = req.params.userId;
 
-    console.log("update user", firstName);
-    
     const data = model.updateUser(userId, firstName, lastName,email,contact, password, userType,profileImage, async function(err, result,dataResult){
         if(!result){
             res.json({
@@ -230,15 +218,15 @@ const updateUser = (req, res)=>{
 // to deleteuser
 const deleteUser = (req, res)=>{
     
-    // const token = req.headers.authorization;
-    // console.log(token);
-    // if(token==undefined){
-    //     notAuthenticated(res);
-    //     return;
-    // }else if(token.length <5){
-    //     notAuthenticated(res);
-    //     return;
-    // }
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
 
     const userId = req.params.userId;
     const data =model.deleteUser(userId, async function(err, result){
@@ -260,10 +248,7 @@ const deleteUser = (req, res)=>{
 };
 
 
-
-
-
-
+// to check if user is authenticated or not
 async function notAuthenticated(req) {
     req.json({
       status: 'fail',
@@ -274,5 +259,11 @@ async function notAuthenticated(req) {
 
 
 module.exports =  {
-    register,login,getUsers,getUserById,updateUser,deleteUser,getUserByEmail
+    register,
+    login,
+    getUsers,
+    getUserById,
+    updateUser,
+    deleteUser,
+    getUserByEmail
 }
