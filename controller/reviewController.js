@@ -1,20 +1,31 @@
 
 const model = require('../model/reviewModel');
 
+
+//  add reivew controller
 const addReview = (req, res)=>{
+
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
+
     const reviewDetails = req.body;
-    model.addReview(reviewDetails,async function(err, result){
-        if(!result){
+    model.addReview(reviewDetails,async function(err, result, dataResult){
+        if(dataResult.length == 0){
             res.json({
-                success:result,
-                message: "fail",
-                error: err,
+                status:'fail',
+                dataResult:dataResult
             });
-        }else if(result){
+        }else if(dataResult.length > 0){
             res.json({
-                result:result,
-                success:result,
-                message:"success"
+                status:'success',
+                dataResult:dataResult
             });
         }else{
             console.log(err)
@@ -23,20 +34,18 @@ const addReview = (req, res)=>{
 };
 
 
-
+// get review controller
 const getReview = (req, res)=>{
-    const data = model.getReview(async function(err, result, dataResult){
+    const data = model.getReview(async function(err, result, dataResult){        
         if(!result){
             res.json({
-                result:result,
-                success:result,
+                status:'success',
+                dataResult:dataResult,
                 message: 'fail'
             });
         }else if(result){
             res.json({
-                success: result,
-                message:'success',
-                data: data.toString(),
+                status:'success',
                 dataResult: dataResult
             });
             
@@ -47,8 +56,10 @@ const getReview = (req, res)=>{
 };
 
 
+//  review by id controller
 const getReviewById = (req, res)=>{
     const reviewId = req.params.reviewId;
+    
     const data = model.getReviewById(reviewId, async function(err, result, dataResult){
         if(!result){
             res.json({
@@ -69,8 +80,10 @@ const getReviewById = (req, res)=>{
     });
 };
 
+
+// get review by user controller
 const getReviewByUser = (req, res)=>{
-    const userId = req.params.userId;
+    const userId = req.params.userId;    
     const data = model.getReviewByUser(userId, async function(err, result, dataResult){
         if(!result){
             res.json({
@@ -92,20 +105,29 @@ const getReviewByUser = (req, res)=>{
 };
 
 
+// get review by shoes controller
 const getReviewByShoes = (req, res)=>{
+
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
+
     const shoesId = req.params.shoesId;
     const data = model.getReviewByShoes(shoesId, async function(err, result, dataResult){
-        if(!result){
+        if(dataResult.length == 0){
             res.json({
-                result:result,
-                success:result,
-                message: 'fail'
+                status:'fail',
+                dataResult:dataResult
             });
-        }else if(result){
+        }else if(dataResult.length > 0){
             res.json({
-                success: result,
-                message:'success',
-                data: data.toString(),
+                status:'success',
                 dataResult: dataResult
             });            
         }else{
@@ -115,47 +137,30 @@ const getReviewByShoes = (req, res)=>{
 };
 
 
-
+// delete review controller
 const deleteReview = (req, res)=>{
+
+    const token = req.headers.authorization;
+    console.log(token);
+    if(token==undefined){
+        notAuthenticated(res);
+        return;
+    }else if(token.length <5){
+        notAuthenticated(res);
+        return;
+    }
     const reviewId = req.params.reviewId;
-    const data =model.deleteReview(reviewId, async function(err, result){
-        if(!result){
+    const data =model.deleteReview(reviewId, async function(err, result, dataResult){
+        console.log("this is data result " +dataResult);
+        
+        if(dataResult == 0){
             res.json({
-                result:result,
-                success: result,
-                message: 'fail'
+                status:'fail',
+                dataResult:dataResult
             });
-        }else if(result){
+        }else if(dataResult > 0){
             res.json({
-                result: result,
-                message:'success'
-            });
-        }else{
-            console.log(err);
-        }
-    });
-};
-
-
-
-const updateReview = (req, res)=>{
-    const review= req.body.review;
-    const userId = req.body.userId;
-    const shoesId = req.body.shoesId;
-    const reviewDate = req.body.reviewDate;
-    
-    const reviewId = req.params.reviewId;
-    const data = model.updateReview(reviewId, review, userId,shoesId,reviewDate, async function(err, result,dataResult){
-        if(!result){
-            res.json({
-                result:result,
-                success: result,
-                message: 'fail'
-            });
-        }else if(result){
-            res.json({
-                result: result,
-                message:'success',
+                status:'success',
                 dataResult:dataResult
             });
         }else{
@@ -165,6 +170,18 @@ const updateReview = (req, res)=>{
 };
 
 
+
+
+async function notAuthenticated(req) {
+    req.json({
+      status: 'fail',
+      message: 'Not Authenticated',
+      code: 404
+    });
+  }
+
+
+
 module.exports =  {
     addReview, 
     getReview,
@@ -172,5 +189,4 @@ module.exports =  {
     getReviewByShoes,
     getReviewByUser,
     deleteReview, 
-    updateReview
  }
