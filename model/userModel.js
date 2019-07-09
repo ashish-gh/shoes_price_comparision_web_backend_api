@@ -1,4 +1,4 @@
-const config = require('../knexfile');
+const config = require('../knex');
 const path = require('path');
 const knex = require('knex');
 const dbClient = knex(config);
@@ -75,7 +75,6 @@ const getUsers = async function getUsers(res){
     try{
         const data = await dbClient.table('users').select('');
         res(null, true, data);
-        console.log(data);
         
     }catch{
         res(null, false);
@@ -83,6 +82,7 @@ const getUsers = async function getUsers(res){
 };
 
 
+// to get user from current user id
 const getUserById = async function getUserById(userId, res){
     try{
         const data = await dbClient
@@ -96,31 +96,23 @@ const getUserById = async function getUserById(userId, res){
 };
 
 
+//  to get user from email address
 const getUserByEmail = async function getUserByEmail(email, res){
+    
     try{
-
-        console.log("email here", typeof(email));
-
-
-        const em = 'ashish.gh123@gmail.com'; 
-        // const em = email.toString();
         const data = await dbClient
         .table('users')
-        .where('email', em)
-        .select('');
-
-        console.log("data", data.length);
-        for(var i =0; i < data.length; i++){           
-            console.log("usertype", data[i].userType);
-        }
-    
+        .where('email', email)
+        .select('');   
         res(null, true, data);
+
     }catch{
         res(null, false);
     }
 };
 
 
+// to update user from email address 
 const updateUser = async function updateUser(userId,firstName,lastName, email,contact,password,userType,profileImage, res){
     console.log("updade model", );
     
@@ -139,7 +131,6 @@ const updateUser = async function updateUser(userId,firstName,lastName, email,co
             userType: userType,
             profileImage: profileImage         
         });
-        console.log("data", data);
         
         res(null, true, data);
     }catch{
@@ -148,15 +139,14 @@ const updateUser = async function updateUser(userId,firstName,lastName, email,co
 };
 
 
-// to delete shoes
-
+// to delete user from user id
 const deleteUser = async function deleteUser(userId, res){
     try{
-        await dbClient
+        const data = await dbClient
         .table('users')
         .where('userId', userId)
         .del();
-        res(null, true);
+        res(null, true, data);
     }catch(error){
         res(null, false);   
         console.log("error: ", error);
@@ -164,8 +154,7 @@ const deleteUser = async function deleteUser(userId, res){
 };
 
 
-
-
+// to export this modules to other modules 
 module.exports = {
     register,
     login,
