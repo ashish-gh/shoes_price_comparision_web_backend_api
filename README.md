@@ -1,9 +1,10 @@
-# Your Project Title Here
-Name: Your Full Name
+# ShoesPriceComparision(ShopWithUs)
 
-CollegeID: Your College ID
+Name: Ashish Ghimire
 
-Batch: Jan19A/B/C/D?
+CollegeID: 160196
+
+Batch: Jan19B
 
 Brief description of the domain of your project!
 
