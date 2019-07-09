@@ -7,7 +7,7 @@ app = express();
 
 
 const shoesRoutes = require('./routes/shoesRoutes');
-const storeRoutes = require('./routes/storeRoutes');
+const storeRoutes = require('./routes/shopRoutes');
 
 
 //cors
