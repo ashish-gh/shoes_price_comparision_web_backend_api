@@ -11,7 +11,7 @@ app.post('/users/auth', user.login);
 // user lists
 app.get('/users', user.getUsers)
 
-// user lists
+// user list by user id
 app.get('/users/:userId', user.getUserById)
 
 // user lists by email
@@ -20,7 +20,7 @@ app.get('/users/:email/users', user.getUserByEmail)
 // user update
 app.put('/users/:userId', user.updateUser)
 
-// user update
+// user delete
 app.delete('/users/:userId', user.deleteUser)
 
 
